@@ -4,9 +4,11 @@ import android.alcode.com.material.R;
 import android.alcode.com.material.adapters.PostRecyclerViewAdapter;
 import android.alcode.com.material.databases.Database;
 import android.alcode.com.material.models.Post;
+import android.alcode.com.material.ui.SpacesItemDecoration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,9 +25,13 @@ import java.util.List;
  */
 public class PostListFragment extends Fragment {
 
+
+    private int gridColumns;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        gridColumns = getResources().getInteger(R.integer.grid_columns);
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_post_list, container, false);
         setupRecyclerView(rv);
@@ -33,7 +39,13 @@ public class PostListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+
+        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(),gridColumns));
+        recyclerView.setHasFixedSize(true);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+
         PostRecyclerViewAdapter postRecyclerViewAdapter = new PostRecyclerViewAdapter(Database.getInstance().getAllPosts(),getActivity());
         recyclerView.setAdapter(postRecyclerViewAdapter);
     }

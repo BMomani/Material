@@ -10,6 +10,9 @@ public class Post {
     private String owner;
     private int Likes;
 
+    public Post() {
+    }
+
     public Post(String id, String title, String imageUrl, String owner, int likes) {
 
         this.id = id;

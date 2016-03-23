@@ -12,4 +12,8 @@
     <dimen name="grid_column_height">270dp</dimen>
     <dimen name="grid_text_size">16sp</dimen>
     <dimen name="grid_text_padding">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="spacing">1dp</dimen>
+    <integer name="grid_columns">2</integer>
 </resources>

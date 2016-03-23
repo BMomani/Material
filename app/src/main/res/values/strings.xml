@@ -9,4 +9,11 @@
     <string name="highest_rated">Highest Rated</string>
     <string name="favourites">Favourites</string>
     <string name="a11y_Post_title"><![CDATA[<string name=\"a11y_movie_title\">Post title: <xliff:g id=\"post\">%1$s</xliff:g></string>]]></string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="post_extra_subject">Hey! I suggest this for you :) Are you interested</string>
+    <string name="share">Share</string>
+    <string name="popularity">Popularity</string>
+    <string name="language">Language</string>
+
 </resources>

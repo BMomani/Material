@@ -3,7 +3,9 @@ package android.alcode.com.material.activities;
 import android.alcode.com.material.R;
 import android.alcode.com.material.adapters.PostRecyclerViewAdapter;
 import android.alcode.com.material.fragments.PostListFragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -22,18 +24,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.quinny898.library.persistentsearch.SearchBox;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity  implements PostRecyclerViewAdapter.OnAdapterItemSelectedListener {
 
     DrawerLayout mDrawerLayout;
+    private SearchBox search;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        search = (SearchBox) findViewById(R.id.search_box);
+        search.enableVoiceRecognition(this);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -131,13 +141,80 @@ public class MainActivity extends AppCompatActivity  implements PostRecyclerView
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if (id == R.id.action_search) {
+            openSearch();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    protected void closeSearch() {
+        search.hideCircularly(this);
+        if (search.getSearchText().isEmpty()) toolbar.setTitle("");
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SearchBox.VOICE_RECOGNITION_CODE && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data
+                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            search.setSearchString(matches.get(0));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void openSearch() {
+        search.setLogoText("");
+        search.revealFromMenuItem(R.id.action_search, this);
+
+        search.setMenuListener(new SearchBox.MenuListener() {
+
+            @Override
+            public void onMenuClick() {
+            }
+
+        });
+        search.setSearchListener(new SearchBox.SearchListener() {
+
+            @Override
+            public void onSearchOpened() {
+                // Use this to tint the screen
+
+            }
+
+            @Override
+            public void onSearchClosed() {
+                // Use this to un-tint the screen
+                closeSearch();
+                toolbar.setTitle(getResources().getString(R.string.app_name));
+            }
+
+            @Override
+            public void onSearchTermChanged() {
+                // React to the search term changing
+                // Called after it has updated results
+            }
+
+            @Override
+            public void onSearch(String searchTerm) {
+                Toast.makeText(MainActivity.this, searchTerm + " Searched",
+                        Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onSearchCleared() {
+
+            }
+
+        });
     }
 
     @Override
     public void onItemSelected(String id) {
-        Toast.makeText(getApplicationContext(),id, Toast.LENGTH_LONG).show();
+        Intent mMovieDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
+        mMovieDetailIntent.putExtra("id", id);
+        startActivity(mMovieDetailIntent);
     }
 
     static class Adapter extends FragmentPagerAdapter {
