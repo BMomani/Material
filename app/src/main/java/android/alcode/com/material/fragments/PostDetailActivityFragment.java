@@ -3,14 +3,18 @@ package android.alcode.com.material.fragments;
 import android.alcode.com.material.R;
 import android.alcode.com.material.adapters.PostDetailsAdapter;
 import android.alcode.com.material.databases.Database;
-import android.alcode.com.material.models.Post;
 import android.alcode.com.material.models.PostDetails;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +23,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -57,21 +63,47 @@ public class PostDetailActivityFragment extends Fragment {
         mToolbar = (Toolbar) v.findViewById(R.id.toolbar_movie_details);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mBackdrop = (ImageView) v.findViewById(R.id.backdrop);
-        Picasso.with(getContext()).load(postDetails.getImageUrl())
-                .into(mBackdrop);
+
+        if (null != postDetails)
+            Picasso.with(getContext()).load(postDetails.getImageUrl())
+                    .into(mBackdrop, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Bitmap posterBitmap = ((BitmapDrawable) mBackdrop.getDrawable()).getBitmap();
+                            Palette.from(posterBitmap).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(Palette palette) {
+                                    //container.setBackgroundColor(ColorUtils.setAlphaComponent(palette.getMutedColor(mDefaultColor), 190)); //Opacity
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                                        int colorDark = ContextCompat.getColor(getContext(), (R.color.colorPrimaryDark));
+                                        getActivity().getWindow().setStatusBarColor(colorDark);
+                                        fab.setBackgroundTintList(ColorStateList.valueOf(colorDark));
+                                    }
+                                    mCollapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(getContext(), (R.color.colorPrimaryTransparent)));
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
 
 
         fab = (FloatingActionButton) v.findViewById(R.id.fab);
 
 
-        mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
-        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
+        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getContext(), R.color.transparent));
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(getContext(), R.color.transparent));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new PostDetailsAdapter(postDetails, getActivity());
-        mRecyclerView.setAdapter(mAdapter);
-
+        if (null != postDetails) {
+            mAdapter = new PostDetailsAdapter(postDetails, getActivity());
+            mRecyclerView.setAdapter(mAdapter);
+        }
 //        // mBackdrop.setResponseObserver(new PaletteNetworkImageView
 //        int colorLight = mBackdrop.getVibrantColor();
 //        mCollapsingToolbarLayout.setContentScrimColor(colorLight);

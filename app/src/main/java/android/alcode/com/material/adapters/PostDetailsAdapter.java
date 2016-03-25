@@ -4,6 +4,11 @@ import android.alcode.com.material.R;
 import android.alcode.com.material.models.PostDetails;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -21,11 +27,12 @@ public class PostDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private PostDetails postDetails;
     private Activity mAct;
     private LayoutInflater mInflater;
+    private int mDefaultColor;
 
     public PostDetailsAdapter(PostDetails postDetails, Activity activity) {
         this.postDetails = postDetails;
         this.mAct = activity;
-
+        mDefaultColor = ContextCompat.getColor(mAct, (R.color.colorPrimary));
         mInflater = (LayoutInflater) mAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -38,10 +45,31 @@ public class PostDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         Picasso.with(mAct).load(postDetails.getPosterUrl())
-                .into(((ViewHolderDetails) holder).getImageView());
+                .into(((ViewHolderDetails) holder).getImageView(), new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap posterBitmap = ((BitmapDrawable) ((ViewHolderDetails) holder).getImageView().getDrawable()).getBitmap();
+                        Palette.from(posterBitmap).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                //container.setBackgroundColor(ColorUtils.setAlphaComponent(palette.getMutedColor(mDefaultColor), 190)); //Opacity
+                                ((ViewHolderDetails) holder).getRatingsBackground().getDrawable().setColorFilter(palette.getVibrantColor(mDefaultColor), PorterDuff.Mode.MULTIPLY);
+                                ((ViewHolderDetails) holder).getGenreBackground().getDrawable().setColorFilter(palette.getVibrantColor(mDefaultColor), PorterDuff.Mode.MULTIPLY);
+                                ((ViewHolderDetails) holder).getPopBackground().getDrawable().setColorFilter(palette.getVibrantColor(mDefaultColor), PorterDuff.Mode.MULTIPLY);
+                                ((ViewHolderDetails) holder).getLangBackground().getDrawable().setColorFilter(palette.getVibrantColor(mDefaultColor), PorterDuff.Mode.MULTIPLY);
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
         ((ViewHolderDetails) holder).getTitleView().setText(postDetails.getTitle());
         ((ViewHolderDetails) holder).getTaglineView().setText(postDetails.getSubtitle());
         ((ViewHolderDetails) holder).getDurationView().setText(postDetails.getFees())   ;
@@ -50,7 +78,7 @@ public class PostDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((ViewHolderDetails) holder).getGenreView().setText(postDetails.getCategory());
         ((ViewHolderDetails) holder).getPopularityView().setText(postDetails.getSubCategory());
         ((ViewHolderDetails) holder).getLanguageView().setText(postDetails.getLocation());
-        ((ViewHolderDetails) holder).getVoteCountView().setText(postDetails.getLikes());
+        ((ViewHolderDetails) holder).getVoteCountView().setText(postDetails.getLikes() + " Votes");
 
         ((ViewHolderDetails) holder).getOverviewView().setText(postDetails.getLongDescription());
 

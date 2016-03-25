@@ -73,9 +73,9 @@
 
 
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/horizontalScrollView" >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -206,7 +206,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:text="@string/popularity"
+                    android:text="@string/sub_category"
                     android:textSize="11sp" />
             </LinearLayout>
 
@@ -250,7 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:text="@string/language"
+                    android:text="@string/location"
                     android:textSize="11sp" />
             </LinearLayout>
 
