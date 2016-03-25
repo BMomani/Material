@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,14 +41,12 @@ public class PostListFragment extends Fragment {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
 
-        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(),gridColumns));
+        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), gridColumns));
         recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-
-        PostRecyclerViewAdapter postRecyclerViewAdapter = new PostRecyclerViewAdapter(Database.getInstance().getAllPosts(),getActivity());
-        recyclerView.setAdapter(postRecyclerViewAdapter);
+        PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(Database.getInstance().getAllPosts(),getActivity());
+        recyclerView.setAdapter(adapter);
     }
 
 }

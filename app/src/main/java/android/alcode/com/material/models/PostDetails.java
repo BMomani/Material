@@ -2,14 +2,15 @@ package android.alcode.com.material.models;
 
 /**
  * Created by MOMANI on 2016/03/23.
+ * this class for detail Activity
  */
 public class PostDetails {
-private String id,imageUrl,posterUrl, title, subtitle,longDescription, fees, likes, category,subCategory,location,ownerId;
+private String id,imageUrl,posterUrl, title, subtitle,longDescription, fees, likes, category,subCategory,location,date,ownerId;
 
     public PostDetails() {
     }
 
-    public PostDetails(String id, String imageUrl, String posterUrl, String title, String subtitle, String longDescription, String fees, String likes, String category, String subCategory, String location, String ownerId) {
+    public PostDetails(String id, String imageUrl, String posterUrl, String title, String subtitle, String longDescription, String fees, String likes, String category, String subCategory, String location, String date, String ownerId) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.posterUrl = posterUrl;
@@ -21,6 +22,7 @@ private String id,imageUrl,posterUrl, title, subtitle,longDescription, fees, lik
         this.category = category;
         this.subCategory = subCategory;
         this.location = location;
+        this.date = date;
         this.ownerId = ownerId;
     }
 
@@ -118,6 +120,14 @@ private String id,imageUrl,posterUrl, title, subtitle,longDescription, fees, lik
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
 

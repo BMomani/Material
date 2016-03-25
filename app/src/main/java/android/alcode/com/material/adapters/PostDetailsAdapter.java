@@ -45,7 +45,7 @@ public class PostDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((ViewHolderDetails) holder).getTitleView().setText(postDetails.getTitle());
         ((ViewHolderDetails) holder).getTaglineView().setText(postDetails.getSubtitle());
         ((ViewHolderDetails) holder).getDurationView().setText(postDetails.getFees())   ;
-
+        ((ViewHolderDetails) holder).getDateStatusView().setText(postDetails.getDate());
 
         ((ViewHolderDetails) holder).getGenreView().setText(postDetails.getCategory());
         ((ViewHolderDetails) holder).getPopularityView().setText(postDetails.getSubCategory());
