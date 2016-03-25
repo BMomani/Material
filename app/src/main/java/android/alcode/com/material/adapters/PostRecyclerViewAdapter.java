@@ -4,6 +4,7 @@ import android.alcode.com.material.R;
 import android.alcode.com.material.models.Post;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -84,6 +86,12 @@ public class PostRecyclerViewAdapter  extends RecyclerView.Adapter<PostRecyclerV
         public ViewHolderSmall(View v) {
             super(v);
             imageView = (ImageView) v.findViewById(R.id.image);
-            titleView = (TextView) v.findViewById(R.id.title);        }
+            titleView = (TextView) v.findViewById(R.id.title);
+            MaterialRippleLayout.on(imageView)
+                    .rippleColor(Color.parseColor("#FF0000"))
+                    .rippleAlpha(0.2f)
+                    .rippleHover(true)
+                    .create();
+        }
     }
 }

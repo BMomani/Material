@@ -34,8 +34,12 @@ dependencies {
     compile 'com.android.support:palette-v7:23.0.1'
 
     //thred party
+    //image prossising
     compile 'com.squareup.picasso:picasso:2.5.2'
+    //searchbar
     compile 'com.quinny898.library.persistentsearch:library:1.0.0-SNAPSHOT'
+    //Material Ripple Layout for api >= 14
+    compile 'com.balysv:material-ripple:1.0.2'
 
 
 
